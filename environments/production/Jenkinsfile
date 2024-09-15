@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID') // Jenkins credentials ID
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') // Jenkins credentials ID
+    }
+    
+    stages {
+        stage ('Terraform Init') {
+            steps {
+                sh 'cd environments/production && terraform init'
+            }
+        }
+        stage ('Terraform Apply/Destroy') {
+            steps {
+                sh 'cd environments/production && terraform destroy --auto-approve'
+            }
+        }
+    }
+}
